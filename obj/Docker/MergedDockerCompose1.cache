@@ -1,0 +1,144 @@
+name: dockercompose9044869037793572602
+services:
+  windparkcontroller:
+    build:
+      context: C:\Users\jcj\source\repos\BreezeBalancer
+      dockerfile: WindParkController/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: WindParkController
+      target: base
+    container_name: WindParkController
+    depends_on:
+      windparkservice:
+        condition: service_started
+    entrypoint:
+    - tail
+    - -f
+    - /dev/null
+    environment:
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: ""
+    image: windparkcontroller:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/net7.0/WindParkController.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 80
+      published: "8000"
+      protocol: tcp
+    tty: true
+    volumes:
+    - type: bind
+      source: C:\Users\jcj\source\repos\BreezeBalancer\WindParkController
+      target: /app
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\jcj\source\repos\BreezeBalancer
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\jcj\vsdbg\vs2017u5
+      target: /remote_debugger
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\jcj\.nuget\packages\
+      target: /root/.nuget/packages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\jcj\AppData\Roaming/ASP.NET/Https
+      target: /root/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\jcj\AppData\Roaming/Microsoft/UserSecrets
+      target: /root/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\TokenService.Proxy\linux-x64\net7.0
+      target: /TokenService.Proxy
+      read_only: true
+      bind:
+        create_host_path: true
+  windparkservice:
+    build:
+      context: C:\Users\jcj\source\repos\BreezeBalancer
+      dockerfile: WindParkService/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: WindParkService
+      target: base
+    container_name: WindParkService
+    entrypoint:
+    - tail
+    - -f
+    - /dev/null
+    environment:
+      NUGET_FALLBACK_PACKAGES: ""
+    image: windparkservice:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/net7.0/WindParkService.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 5001
+      published: "5001"
+      protocol: tcp
+    tty: true
+    volumes:
+    - type: bind
+      source: C:\Users\jcj\source\repos\BreezeBalancer\WindParkService
+      target: /app
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\jcj\source\repos\BreezeBalancer
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\jcj\vsdbg\vs2017u5
+      target: /remote_debugger
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\jcj\.nuget\packages\
+      target: /root/.nuget/packages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\jcj\AppData\Roaming/Microsoft/UserSecrets
+      target: /root/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\TokenService.Proxy\linux-x64\net7.0
+      target: /TokenService.Proxy
+      read_only: true
+      bind:
+        create_host_path: true
+networks:
+  default:
+    name: dockercompose9044869037793572602_default

@@ -1,0 +1,2 @@
+obj\Debug\net7.0\Protos/Windpark.cs \
+obj\Debug\net7.0\Protos/WindparkGrpc.cs: Protos/windpark.proto

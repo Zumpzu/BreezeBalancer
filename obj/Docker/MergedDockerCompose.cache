@@ -1,0 +1,30 @@
+name: dockercompose9044869037793572602
+services:
+  windparkcontroller:
+    build:
+      context: C:\Users\jcj\source\repos\BreezeBalancer
+      dockerfile: WindParkController/Dockerfile
+    depends_on:
+      windparkservice:
+        condition: service_started
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 80
+      published: "8000"
+      protocol: tcp
+  windparkservice:
+    build:
+      context: C:\Users\jcj\source\repos\BreezeBalancer
+      dockerfile: WindParkService/Dockerfile
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 5001
+      published: "5001"
+      protocol: tcp
+networks:
+  default:
+    name: dockercompose9044869037793572602_default

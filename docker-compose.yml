@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  windparkservice:
+    build:
+      context: .
+      dockerfile: WindParkService/Dockerfile
+    ports:
+      - "5001:5001"
+
+  windparkcontroller:
+    build:
+      context: .
+      dockerfile: WindParkController/Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - windparkservice

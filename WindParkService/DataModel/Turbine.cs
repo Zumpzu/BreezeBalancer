@@ -18,13 +18,11 @@ public class Turbine
 
     public void Start()
     {
-        // Logic to start the turbine
         IsRunning = true;
     }
 
     public void Stop()
     {
-        // Logic to stop the turbine
         IsRunning = false;
     }
 }

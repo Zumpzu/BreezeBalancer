@@ -58,9 +58,6 @@ namespace GrpcService {
 
   }
   #region Messages
-  /// <summary>
-  /// The request message containing the adjustment value for the production target.
-  /// </summary>
   public sealed partial class SetProductionTargetRequest : pb::IMessage<SetProductionTargetRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -108,9 +105,6 @@ namespace GrpcService {
     /// <summary>Field number for the "adjustmentValue" field.</summary>
     public const int AdjustmentValueFieldNumber = 1;
     private float adjustmentValue_;
-    /// <summary>
-    /// Positive to increase, negative to decrease
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public float AdjustmentValue {
@@ -442,9 +436,6 @@ namespace GrpcService {
 
   }
 
-  /// <summary>
-  /// The request message containing the current market price.
-  /// </summary>
   public sealed partial class SetMarketPriceRequest : pb::IMessage<SetMarketPriceRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -823,9 +814,6 @@ namespace GrpcService {
 
   }
 
-  /// <summary>
-  /// The response message containing the status of the operation.
-  /// </summary>
   public sealed partial class GetTurbineProductionsRequest : pb::IMessage<GetTurbineProductionsRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -1156,9 +1144,6 @@ namespace GrpcService {
 
   }
 
-  /// <summary>
-  /// The message representing a turbine with its expected production.
-  /// </summary>
   public sealed partial class TurbineProductionInfo : pb::IMessage<TurbineProductionInfo>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -1220,9 +1205,6 @@ namespace GrpcService {
     /// <summary>Field number for the "expectedProduction" field.</summary>
     public const int ExpectedProductionFieldNumber = 2;
     private float expectedProduction_;
-    /// <summary>
-    /// 0 if not running, otherwise max capacity
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public float ExpectedProduction {

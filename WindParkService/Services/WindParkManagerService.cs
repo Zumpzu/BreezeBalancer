@@ -5,27 +5,27 @@ namespace WindParkService.Services
 {
     public class WindParkManagementService : WindParkManagement.WindParkManagementBase
     {
-        private readonly IWindParkFacade _facade;
+        private readonly IWindParkManager _manager;
         private readonly ILogger<WindParkManagementService> _logger;
 
-        public WindParkManagementService(IWindParkFacade facade, ILogger<WindParkManagementService> logger)
+        public WindParkManagementService(IWindParkManager manager, ILogger<WindParkManagementService> logger)
         {
-            _facade = facade ?? throw new ArgumentNullException(nameof(facade));
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public override async Task<SetProductionTargetResponse> SetProductionTarget(SetProductionTargetRequest request, ServerCallContext context)
+        public override Task<SetProductionTargetResponse> SetProductionTarget(SetProductionTargetRequest request, ServerCallContext context)
         {
             if (request == null)
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "Request cannot be null"));
             }
 
-            float newTarget = _facade.AdjustProductionTarget(request.AdjustmentValue);
-            return new SetProductionTargetResponse { AdjustedValue = newTarget };
+            float newTarget = _manager.AdjustProductionTarget(request.AdjustmentValue);
+            return Task.FromResult(new SetProductionTargetResponse { AdjustedValue = newTarget });
         }
 
-        public override async Task<SetMarketPriceResponse> SetMarketPrice(SetMarketPriceRequest request, ServerCallContext context)
+        public override Task<SetMarketPriceResponse> SetMarketPrice(SetMarketPriceRequest request, ServerCallContext context)
         {
             if (request == null)
             {
@@ -37,14 +37,13 @@ namespace WindParkService.Services
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "PriceLimit cannot be negative"));
             }
 
-            _facade.SetMarketPrice(request.PriceLimit);
-            return new SetMarketPriceResponse { PriceLimit = request.PriceLimit };
+            _manager.SetMarketPrice(request.PriceLimit);
+            return Task.FromResult(new SetMarketPriceResponse { PriceLimit = request.PriceLimit });
         }
 
         public override async Task<GetTurbineProductionsResponse> GetTurbineProductions(GetTurbineProductionsRequest request, ServerCallContext context)
         {
-            // Assuming there is no input to validate for GetTurbineProductionsRequest
-            var productions = await _facade.GetTurbineProductionInfos();
+            var productions = await _manager.GetTurbineProductionInfos();
             var response = new GetTurbineProductionsResponse();
             response.Turbines.AddRange(productions);
             return response;

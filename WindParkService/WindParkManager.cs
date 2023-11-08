@@ -2,40 +2,40 @@
 using WindParkService.DataModel;
 using WindParkService.Services;
 
-public interface IWindParkFacade
+public interface IWindParkManager
 {
     void SetMarketPrice(float priceLimit);
     float AdjustProductionTarget(float adjustmentValue);
     Task<IEnumerable<TurbineProductionInfo>> GetTurbineProductionInfos();
 }
-public class WindParkFacade : IWindParkFacade
+public class WindParkManager : IWindParkManager
 {
     private float _currentMarketPrice = 0;
     private float _currentProductionTarget = 0;
+    private float _parkCapacity = 0;
 
     private readonly ITurbineProductionService _turbineProductionService;
     private readonly ITurbineRepository _turbineRepository;
+    private readonly SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
 
-    public WindParkFacade(ITurbineRepository turbineRepository, ITurbineProductionService turbineProductionService)
+    public WindParkManager(ITurbineRepository turbineRepository, ITurbineProductionService turbineProductionService)
     {
         _turbineRepository = turbineRepository;
         _turbineProductionService = turbineProductionService;
+        SetParkCapacity();
+    }
 
+    private async void SetParkCapacity()
+    {
+        var turbines = await _turbineRepository.GetAllTurbinesAsync();
+        _parkCapacity = turbines.Select(x => x.MaxCapacity).Sum();
     }
 
     public void SetMarketPrice(float priceLimit)
     {
-        try
-        {
-            _currentMarketPrice = priceLimit;
-            var _ = UpdateTurbineStatusesAsync();
-        }
-        catch (Exception ex)
-        {
-            // Log the exception using the logger
-            _logger.LogError(ex, "An error occurred while updating turbine statuses.");
-        }
-         // Fire and forget, but handle exceptions accordingly
+
+        _currentMarketPrice = priceLimit;
+        var _ = UpdateTurbineStatusesAsync(); 
     }
 
     public float AdjustProductionTarget(float adjustmentValue)
@@ -46,13 +46,18 @@ public class WindParkFacade : IWindParkFacade
             newTarget = 0;
         }
 
+        if (newTarget > _parkCapacity)
+        {
+            newTarget = _parkCapacity;
+        }
+
         _currentProductionTarget = newTarget;
         var _ = UpdateTurbineStatusesAsync(); 
         return _currentProductionTarget;
     }
 
 
-    private readonly SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
+    
     public async Task UpdateTurbineStatusesAsync()
     {
         await _updateSemaphore.WaitAsync();

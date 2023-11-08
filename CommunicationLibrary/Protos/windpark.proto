@@ -5,26 +5,23 @@ option csharp_namespace = "GrpcService";
 package windpark;
 
 service WindParkManagement {
-  // Increase or decrease the park's production target.
+
   rpc SetProductionTarget(SetProductionTargetRequest) returns (SetProductionTargetResponse);
 
-  // Submit the current market price.
   rpc SetMarketPrice(SetMarketPriceRequest) returns (SetMarketPriceResponse);
 
-  // Retrieve a list of turbines with their expected production.
   rpc GetTurbineProductions(GetTurbineProductionsRequest) returns (GetTurbineProductionsResponse);
 }
 
-// The request message containing the adjustment value for the production target.
+
 message SetProductionTargetRequest {
-  float adjustmentValue = 1; // Positive to increase, negative to decrease
+  float adjustmentValue = 1; 
 }
 
 message SetProductionTargetResponse {
   float adjustedValue = 1;
 }
 
-// The request message containing the current market price.
 message SetMarketPriceRequest {
   float priceLimit = 1;
 }
@@ -33,7 +30,6 @@ message SetMarketPriceResponse {
   float priceLimit = 1;
 }
 
-// The response message containing the status of the operation.
 message GetTurbineProductionsRequest {
 }
 
@@ -41,10 +37,10 @@ message GetTurbineProductionsResponse {
    repeated TurbineProductionInfo turbines = 1;
 }
 
-// The message representing a turbine with its expected production.
+
 message TurbineProductionInfo {
   int32 id = 1;
-  float expectedProduction = 2; // 0 if not running, otherwise max capacity
+  float expectedProduction = 2;
   string name = 3;
 }
 

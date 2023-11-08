@@ -8,7 +8,7 @@ using WindParkService.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddGrpc();
-builder.Services.AddSingleton<IWindParkFacade, WindParkFacade>();
+builder.Services.AddSingleton<IWindParkManager, WindParkManager>();
 builder.Services.AddSingleton<ITurbineRepository, InMemoryTurbineRepository>();
 builder.Services.AddSingleton<ITurbineProductionService, TurbineParkProductionInfoService>();
 
